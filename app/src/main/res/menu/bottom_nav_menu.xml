@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/nav_heat"
+        android:icon="@drawable/heatwave"
+        android:title="Heat Wave" />
+    <item
+        android:id="@+id/nav_cyclone"
+        android:icon="@drawable/cyclone"
+        android:title="Cyclone" />
+    <item
+        android:id="@+id/nav_flood"
+        android:icon="@drawable/flood"
+        android:title="Flood" />
+</menu>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.fragment_login">
+
+    <EditText
+        android:id="@+id/email_field_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/authentication_fields"
+        android:drawableLeft="@drawable/baseline_email_24"
+        android:drawablePadding="8dp"
+        android:ems="10"
+        android:hint="example@example.com"
+        android:includeFontPadding="false"
+        android:inputType="textEmailAddress"
+        android:paddingLeft="20dp"
+        android:textAlignment="viewStart"
+        android:textColor="@color/darkBlue"
+        app:layout_constraintBottom_toTopOf="@+id/password_text_login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/email_text_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Email"
+        android:textColor="@color/darkBlue"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/email_field_login"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/password_text_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Password"
+        android:textColor="@color/darkBlue"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/password_field_login"
+        app:layout_constraintStart_toStartOf="@+id/email_text_login" />
+
+    <EditText
+        android:id="@+id/password_field_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
+        android:background="@drawable/authentication_fields"
+        android:drawableLeft="@drawable/baseline_lock_24"
+        android:drawablePadding="8dp"
+        android:ems="10"
+        android:hint="example"
+        android:inputType="textPassword"
+        android:paddingLeft="20dp"
+        android:textColor="@color/darkBlue"
+        app:layout_constraintBottom_toTopOf="@+id/login_btn"
+        app:layout_constraintEnd_toEndOf="@+id/email_field_login"
+        app:layout_constraintStart_toStartOf="@+id/email_field_login" />
+
+    <Button
+        android:id="@+id/login_btn"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:fontFamily="@font/poppins_bold"
+        android:text="Login"
+        android:textColor="@color/white"
+        android:textColorLink="@color/darkBlue"
+        android:textSize="24sp"
+        app:backgroundTint="@color/darkBlue"
+        app:cornerRadius="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Or signup here"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
