@@ -4,7 +4,8 @@ import com.google.gson.annotations.SerializedName
 
 data class OpenWeatherResponse(
     val main: Main,
-    val rain: Rain?
+    val rain: Rain?,
+    val wind: Wind?
 )
 
 data class Main(
@@ -15,4 +16,9 @@ data class Main(
 data class Rain(
     @SerializedName("1h")
     val rainLast1Hour: Double?
+)
+
+data class Wind(
+    @SerializedName("speed")
+    val windspeed: Double?
 )
