@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/nav_heat"
-        android:icon="@drawable/heatwave"
+        android:icon="@drawable/smoke"
         android:title="Heat Wave" />
     <item
         android:id="@+id/nav_cyclone"
@@ -14,4 +14,8 @@
         android:id="@+id/nav_flood"
         android:icon="@drawable/flood"
         android:title="Flood" />
+    <item
+        android:id="@+id/nav_earthquake"
+        android:icon="@drawable/earthquake"
+        android:title="Earthquake" />
 </menu>

@@ -8,6 +8,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.example.safenet.fragment.cyclone_main
+import com.example.safenet.fragment.earthquake_main
 import com.example.safenet.fragment.flood_main
 import com.example.safenet.fragment.heat_wave_main
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -55,6 +56,8 @@ class MainActivity : AppCompatActivity(), PermissionsListener {
                 loadFragment(cyclone_main(), false)
             } else if (items == R.id.nav_flood) {
                 loadFragment(flood_main(), false)
+            }else if (items==R.id.nav_earthquake){
+                loadFragment(earthquake_main(),false)
             }
             true
         }
