@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,8 @@ import android.view.ViewGroup
 import android.view.autofill.AutofillId
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.PackageManagerCompat.LOG_TAG
+import com.example.safenet.DatabaseHelperCyclone
 import com.example.safenet.MainActivity
 import com.example.safenet.OpenWeatherApiClient
 import com.example.safenet.OpenWeatherResponse
@@ -39,47 +42,8 @@ class cyclone_main : Fragment() {
 
     private lateinit var mapView2:MapView
     private var pointAnnotationManager: PointAnnotationManager? = null
-
-    private val cityCoordinates = listOf(
-        Pair(26.2124, 127.6809),
-        Pair(33.5904, 130.4017),
-        Pair(35.6895, 139.6917),
-        Pair(26.2124, 127.6809),
-        Pair(16.5662, 121.2620),
-        Pair(10.3157, 123.8854),
-        Pair(7.1907, 125.4553),
-        Pair(26.6340, 78.3617),
-        Pair(26.5361, 77.0616),
-        Pair(33.4996, 126.5312),
-        Pair(36.5263, 128.7973),
-        Pair(35.8298, 127.1480),
-        Pair(23.4241, 113.3622),
-        Pair(26.0789, 117.9874),
-        Pair(29.1832, 120.0934),
-        Pair(19.6959, 109.7453),
-        Pair(20.1497, 75.2066),
-        Pair(20.0169, 75.8200),
-        Pair(20.8880, 76.2591),
-        Pair(18.7742, 68.3937),
-        Pair(18.7650, 69.0357),
-        Pair(21.0466, 107.0448),
-        Pair(19.8075, 105.7851),
-        Pair(18.8890, 105.6810),
-        Pair(25.5000, 90.5000),
-        Pair(19.1738, 96.1342),
-        Pair(23.7416, 98.0734),
-        Pair(20.3165, 87.1086),
-        Pair(31.9686, 99.9018),
-        Pair(30.9843, 91.9623),
-        Pair(32.3547, 89.3985),
-        Pair(32.3182, 86.9023),
-        Pair(27.9944, 81.7603),
-        Pair(35.7596, 79.0193),
-        Pair(45.2538, 69.4455),
-        Pair(-18.7669, 46.8691),
-        Pair(17.1899, 88.4976),
-        Pair(18.9712, 72.2852),
-        )
+    private lateinit var databaseHelperCyclone: DatabaseHelperCyclone
+    private lateinit var cityCoordinates: MutableList<Pair<Double, Double>>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -101,6 +65,24 @@ class cyclone_main : Fragment() {
         } else {
             permissionsManager.requestLocationPermissions(requireActivity())
         }
+
+        databaseHelperCyclone = DatabaseHelperCyclone(requireContext())
+        databaseHelperCyclone.initializeDatabase()
+
+        val cursor = databaseHelperCyclone.db.rawQuery("SELECT latitude, longitude FROM ${databaseHelperCyclone.TABLE_NAME}", null)
+
+        cityCoordinates = mutableListOf()
+        while (cursor.moveToNext()) {
+            val lat = cursor.getDouble(cursor.getColumnIndexOrThrow("latitude"))
+            val lon = cursor.getDouble(cursor.getColumnIndexOrThrow("longitude"))
+            cityCoordinates.add(Pair(lat, lon))
+        }
+        for ((lat, lon) in cityCoordinates) {
+            Log.d("CycloneMainFragment", "City Coordinate: Latitude = $lat, Longitude = $lon")
+        }
+
+        cursor.close()
+
 
         mapView2 = view.findViewById(R.id.mapViewCyclone)
         mapView2.getMapboxMap().loadStyleUri(
