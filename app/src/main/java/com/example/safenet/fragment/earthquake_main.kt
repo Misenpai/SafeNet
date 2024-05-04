@@ -104,7 +104,7 @@ class earthquake_main : Fragment() {
             permissionsManager.requestLocationPermissions(requireActivity())
         }
 
-        mapView2 = view.findViewById(R.id.mapViewCyclone)
+        mapView2 = view.findViewById(R.id.mapViewEarthquake)
         mapView2.getMapboxMap().loadStyleUri(
             Style.MAPBOX_STREETS
         ){style->fetchEarthquakeData()}

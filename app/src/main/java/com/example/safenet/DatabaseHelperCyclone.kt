@@ -6,14 +6,14 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
 class DatabaseHelperCyclone(private val context: Context) {
-    private val DB_NAME = "coordinates.db"
-    val TABLE_NAME = "coordinates"
+    private val DB_NAME = "coordinates_cyclone.db"
+    val TABLE_NAME_CYCLONE = "coordinates_cyclone"
     private val COL_ID = "id"
     private val COL_LATITUDE = "latitude"
     private val COL_LONGITUDE = "longitude"
     private val DB_VERSION = 1
 
-    private val sqlCreateTableQuery = "CREATE TABLE IF NOT EXISTS $TABLE_NAME ($COL_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COL_LATITUDE REAL, $COL_LONGITUDE REAL)"
+    private val sqlCreateTableQuery = "CREATE TABLE IF NOT EXISTS ${TABLE_NAME_CYCLONE} ($COL_ID INTEGER PRIMARY KEY AUTOINCREMENT, $COL_LATITUDE REAL, $COL_LONGITUDE REAL)"
 
     private val dbHelper: SQLiteOpenHelper = object : SQLiteOpenHelper(context,DB_NAME,null,DB_VERSION){
         override fun onCreate(db: SQLiteDatabase) {
@@ -80,7 +80,7 @@ class DatabaseHelperCyclone(private val context: Context) {
             values.clear()
             values.put(COL_LATITUDE, lat)
             values.put(COL_LONGITUDE, lon)
-            db.insert(TABLE_NAME, null, values)
+            db.insert(TABLE_NAME_CYCLONE, null, values)
         }
     }
 }

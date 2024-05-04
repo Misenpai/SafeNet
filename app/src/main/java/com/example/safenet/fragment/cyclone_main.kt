@@ -11,10 +11,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.autofill.AutofillId
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.content.PackageManagerCompat.LOG_TAG
 import com.example.safenet.DatabaseHelperCyclone
 import com.example.safenet.MainActivity
 import com.example.safenet.OpenWeatherApiClient
@@ -69,7 +67,7 @@ class cyclone_main : Fragment() {
         databaseHelperCyclone = DatabaseHelperCyclone(requireContext())
         databaseHelperCyclone.initializeDatabase()
 
-        val cursor = databaseHelperCyclone.db.rawQuery("SELECT latitude, longitude FROM ${databaseHelperCyclone.TABLE_NAME}", null)
+        val cursor = databaseHelperCyclone.db.rawQuery("SELECT latitude, longitude FROM ${databaseHelperCyclone.TABLE_NAME_CYCLONE}", null)
 
         cityCoordinates = mutableListOf()
         while (cursor.moveToNext()) {
