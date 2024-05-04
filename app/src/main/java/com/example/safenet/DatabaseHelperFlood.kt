@@ -31,6 +31,24 @@ class DatabaseHelperFlood(private val context: Context) {
     fun initializeDatabase() {
         val coordinates = listOf(
             Pair(53.30,-6.28),
+            Pair(30.06, 31.24),
+        Pair(23.68, 90.35),
+        Pair(4.57, -74.30),
+        Pair(10.76, 106.70),
+        Pair(18.11, -77.30),
+        Pair(33.94, 67.71),
+        Pair(26.82, 30.80),
+        Pair(35.69, 139.69),
+        Pair(23.63, 120.99),
+        Pair(41.90, 12.45),
+        Pair(47.16, 9.55),
+        Pair(51.92, 4.47),
+        Pair(56.13, -106.35),
+        Pair(-6.17, 106.83),
+        Pair(14.10, -87.22),
+        Pair(18.97, 72.82),
+        Pair(27.72, 85.32),
+        Pair(33.85, 35.86),
         )
         insertCoordinates(coordinates)
     }

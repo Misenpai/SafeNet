@@ -10,13 +10,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
 import com.example.safenet.Earthquake
 import com.example.safenet.MainActivity
 import com.example.safenet.R
-import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.geojson.Point
 import com.mapbox.maps.EdgeInsets
@@ -40,12 +39,12 @@ import org.json.JSONArray
 import org.json.JSONException
 
 
-class earthquake_main : Fragment() {
+class earthquake_main : Fragment(), bottom_sheet_earthquake.OnEarthquakeSubmitListener {
 
     private lateinit var  mapView2:MapView
     private var pointAnnotationManager:PointAnnotationManager?=null
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
-
+    val bottomSheetDialog = bottom_sheet_earthquake()
+    private lateinit var fabPlus:FloatingActionButton
 
     private val cityCoordinates = listOf(
         Pair(26.2124, 127.6809),
@@ -107,19 +106,13 @@ class earthquake_main : Fragment() {
         } else {
             permissionsManager.requestLocationPermissions(requireActivity())
         }
+        bottomSheetDialog.listener = this
 
-        val bottomSheet = view.findViewById<LinearLayout>(R.id.bottom_sheet_earthquake)
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                // Handle state changes here
-            }
+        fabPlus = view.findViewById(R.id.earthquake_bottom_sheet_action)
 
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                // Handle sliding behavior here
-            }
-        })
+       fabPlus.setOnClickListener{
+           bottomSheetDialog.show(childFragmentManager, "earthquake_bottom_sheet")
+       }
 
         mapView2 = view.findViewById(R.id.mapViewEarthquake)
         mapView2.getMapboxMap().loadStyleUri(
@@ -224,6 +217,11 @@ class earthquake_main : Fragment() {
         }
     }
 
+    override fun onEarthquakeSubmit(latitude: Double, longitude: Double) {
+            // Create a marker on the map with the provided latitude and longitude
+            val earthquake = Earthquake(latitude, longitude, 0.0) // Assuming 0.0 for magnitude
+            createMarker(earthquake)
+        }
 
 
 

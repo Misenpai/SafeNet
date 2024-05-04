@@ -16,6 +16,11 @@ class bottom_sheet_earthquake : BottomSheetDialogFragment() {
     private lateinit var longitudeEditText: EditText
     private lateinit var depthEditText: EditText
     private lateinit var submitButton: Button
+    var listener: OnEarthquakeSubmitListener? = null
+
+    interface OnEarthquakeSubmitListener {
+        fun onEarthquakeSubmit(latitude: Double, longitude: Double)
+    }
 
 
     override fun onCreateView(
@@ -34,9 +39,15 @@ class bottom_sheet_earthquake : BottomSheetDialogFragment() {
         submitButton = view.findViewById(R.id.submit_earthquake)
 
         submitButton.setOnClickListener {
-            val latitude = latitudeEditText.text.toString()
-            val longitude = longitudeEditText.text.toString()
-            val depth = depthEditText.text.toString()
+            val latitude = latitudeEditText.text.toString().toDoubleOrNull()
+            val longitude = longitudeEditText.text.toString().toDoubleOrNull()
+
+            if (latitude != null && longitude != null) {
+                listener?.onEarthquakeSubmit(latitude, longitude)
+                dismiss() // Dismiss the bottom sheet after submitting the values
+            } else {
+                // Handle invalid input
+            }
         }
     }
 

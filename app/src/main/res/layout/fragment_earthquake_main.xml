@@ -14,27 +14,18 @@
         app:mapbox_cameraPitch="0.0"
         app:mapbox_cameraZoom="2.0"
         app:mapbox_locationComponentEnabled="true"
-        app:mapbox_locationComponentPuckBearing="heading" />
+        app:mapbox_locationComponentPuckBearing="heading" >
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    </com.mapbox.maps.MapView>
 
-        <LinearLayout
-            android:id="@+id/bottom_sheet_earthquake"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:behavior_peekHeight="500dp"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
-
-            <!-- Include the layout from bottom_sheet_earthquake.xml here -->
-            <include layout="@layout/fragment_bottom_sheet_earthquake" />
-
-        </LinearLayout>
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/earthquake_bottom_sheet_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:src="@drawable/baseline_add_24"
+        app:fabSize="normal"/>
 
 </FrameLayout>

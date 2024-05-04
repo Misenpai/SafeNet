@@ -48,7 +48,36 @@ class DatabaseHelperHeatWave(private val context:Context) {
             Pair(23.18, 79.98), // Jabalpur
             Pair(25.67, 85.31), // Gaya
             Pair(26.46, 80.35), // Kanpur
-            Pair(11.00, 76.96) // Kochi
+            Pair(11.00, 76.96), // Kochi
+            Pair(38.00, 10.00),
+        Pair(35.00, -115.00),
+        Pair(30.00, 10.00),
+        Pair(30.00, 45.00),
+        Pair(30.00, 75.00),
+        Pair(30.00, 70.00),
+        Pair(45.00, 60.00),
+        Pair(-35.00, 135.00),
+        Pair(28.00, -105.00),
+        Pair(-15.00, -75.00),
+        Pair(25.00, 110.00),
+        Pair(10.00, 105.00),
+        Pair(-15.00, -50.00),
+        Pair(39.00, 35.00),
+        Pair(38.00, -98.00),
+        Pair(-25.00, 20.00),
+        Pair(-25.00, 120.00),
+        Pair(-35.00, -65.00),
+        Pair(55.00, 80.00),
+        Pair(24.00, 90.00),
+        Pair(43.00, 3.00),
+        Pair(48.00, 25.00),
+        Pair(20.00, -100.00),
+        Pair(30.00, 80.00),
+        Pair(35.00, 115.00),
+        Pair(40.00, -120.00),
+        Pair(39.50, -8.00),
+        Pair(37.00, -4.00),
+        Pair(28.00, 15.00),
         )
         insertCoordinates(coordinates)
     }
