@@ -10,11 +10,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
 import com.example.safenet.Earthquake
 import com.example.safenet.MainActivity
 import com.example.safenet.R
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.geojson.Point
 import com.mapbox.maps.EdgeInsets
@@ -42,6 +44,8 @@ class earthquake_main : Fragment() {
 
     private lateinit var  mapView2:MapView
     private var pointAnnotationManager:PointAnnotationManager?=null
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
+
 
     private val cityCoordinates = listOf(
         Pair(26.2124, 127.6809),
@@ -103,6 +107,19 @@ class earthquake_main : Fragment() {
         } else {
             permissionsManager.requestLocationPermissions(requireActivity())
         }
+
+        val bottomSheet = view.findViewById<LinearLayout>(R.id.bottom_sheet_earthquake)
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                // Handle state changes here
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                // Handle sliding behavior here
+            }
+        })
 
         mapView2 = view.findViewById(R.id.mapViewEarthquake)
         mapView2.getMapboxMap().loadStyleUri(

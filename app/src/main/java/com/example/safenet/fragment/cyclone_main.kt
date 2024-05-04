@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
 import com.example.safenet.DatabaseHelperCyclone
+import com.example.safenet.Earthquake
 import com.example.safenet.MainActivity
 import com.example.safenet.OpenWeatherApiClient
 import com.example.safenet.OpenWeatherResponse
@@ -43,6 +44,7 @@ class cyclone_main : Fragment() {
     private lateinit var databaseHelperCyclone: DatabaseHelperCyclone
     private lateinit var cityCoordinates: MutableList<Pair<Double, Double>>
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -63,6 +65,8 @@ class cyclone_main : Fragment() {
         } else {
             permissionsManager.requestLocationPermissions(requireActivity())
         }
+
+
 
         databaseHelperCyclone = DatabaseHelperCyclone(requireContext())
         databaseHelperCyclone.initializeDatabase()

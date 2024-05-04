@@ -16,4 +16,25 @@
         app:mapbox_locationComponentEnabled="true"
         app:mapbox_locationComponentPuckBearing="heading" />
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/bottom_sheet_earthquake"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:behavior_peekHeight="500dp"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+            <!-- Include the layout from bottom_sheet_earthquake.xml here -->
+            <include layout="@layout/fragment_bottom_sheet_earthquake" />
+
+        </LinearLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+
 </FrameLayout>

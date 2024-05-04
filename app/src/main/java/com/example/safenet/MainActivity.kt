@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import com.example.safenet.fragment.bottom_sheet_earthquake
 import com.example.safenet.fragment.cyclone_main
 import com.example.safenet.fragment.earthquake_main
 import com.example.safenet.fragment.flood_main

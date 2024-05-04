@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:backgroundTint="@color/white"
+    tools:context=".fragment.bottom_sheet_earthquake">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="500dp">
+
+        <EditText
+            android:id="@+id/latitude_earthquake"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:background="@drawable/authentication_fields"
+            android:drawableLeft="@drawable/baseline_assistant_direction_24"
+            android:drawablePadding="8dp"
+            android:ems="10"
+            android:fontFamily="@font/poppins_medium"
+            android:hint="Latitude"
+            android:inputType="text"
+            android:paddingLeft="20dp"
+            app:layout_constraintEnd_toEndOf="@+id/longitude_earthquake"
+            app:layout_constraintStart_toStartOf="@+id/longitude_earthquake"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/longitude_earthquake"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:background="@drawable/authentication_fields"
+            android:drawableLeft="@drawable/baseline_directions_24"
+            android:drawablePadding="8dp"
+            android:ems="10"
+            android:fontFamily="@font/poppins_medium"
+            android:hint="Longitude"
+            android:inputType="text"
+            android:paddingLeft="20dp"
+            android:textColor="@color/darkBlue"
+            app:layout_constraintEnd_toEndOf="@+id/depth_earthquake"
+            app:layout_constraintStart_toStartOf="@+id/depth_earthquake"
+            app:layout_constraintTop_toBottomOf="@+id/latitude_earthquake" />
+
+        <EditText
+            android:id="@+id/depth_earthquake"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="38dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="39dp"
+            android:background="@drawable/authentication_fields"
+            android:drawableLeft="@drawable/baseline_height_24"
+            android:drawablePadding="8dp"
+            android:ems="10"
+            android:fontFamily="@font/poppins_medium"
+            android:hint="Depth"
+            android:inputType="text"
+            android:paddingLeft="20dp"
+            android:textColor="@color/darkBlue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/longitude_earthquake" />
+
+        <Button
+            android:id="@+id/submit_earthquake"
+            android:layout_width="250dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="40dp"
+            android:backgroundTint="@color/darkBlue"
+            android:fontFamily="@font/poppins_bold"
+            android:text="Submit"
+            android:textColor="@color/white"
+            android:textColorLink="@color/darkBlue"
+            android:textSize="24sp"
+            app:cornerRadius="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/depth_earthquake"
+            app:layout_constraintStart_toStartOf="@+id/depth_earthquake" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
