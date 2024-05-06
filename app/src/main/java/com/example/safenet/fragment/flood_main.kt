@@ -19,6 +19,7 @@ import com.example.safenet.MainActivity
 import com.example.safenet.OpenWeatherApiClient
 import com.example.safenet.OpenWeatherResponse
 import com.example.safenet.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.geojson.Point
 import com.mapbox.maps.EdgeInsets
@@ -66,6 +67,11 @@ class flood_main : Fragment() {
             permissionsManager.requestLocationPermissions(requireActivity())
         }
 
+        val floatingActionButtonFlood = view.findViewById<FloatingActionButton>(R.id.floatingActionButtonFlood)
+        floatingActionButtonFlood.setOnClickListener {
+            showBottomSheetRainfallFragment()
+        }
+
 
         databaseHelperFlood = DatabaseHelperFlood(requireContext())
         databaseHelperFlood.initializeDatabase()
@@ -106,6 +112,12 @@ class flood_main : Fragment() {
             // the transition has been completed with a flag indicating whether the transition succeeded
         }
     }
+
+    private fun showBottomSheetRainfallFragment() {
+        val bottomSheetRainfallFragment = bottom_sheet_rainfall()
+        bottomSheetRainfallFragment.show(parentFragmentManager, "bottomSheetRainfallFragment")
+    }
+
     private fun markHotCitiesOnMap(style: Style){
         bitmapFromDrawableRes(requireContext(),R.drawable.icons8_flood_64)?.let { bitmap ->
             val annotationApi = mapView2.annotations

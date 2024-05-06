@@ -16,4 +16,15 @@
         app:mapbox_locationComponentEnabled="true"
         app:mapbox_locationComponentPuckBearing="heading" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButtonFlood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:src="@drawable/baseline_add_24"
+        app:backgroundTint="@color/skyBlue"
+        app:fabSize="normal" />
+
 </FrameLayout>
