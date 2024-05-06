@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity(), PermissionsListener {
     private lateinit var frameLayout: FrameLayout
     lateinit var permissionsManager: PermissionsManager
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

@@ -156,7 +156,7 @@ class earthquake_main : Fragment(), bottom_sheet_earthquake.OnEarthquakeSubmitLi
                 .withIconImage(bitmap)
 
             predictMagnitude(earthquake.latitude, earthquake.longitude, earthquake.depth) { magnitude ->
-                pointAnnotationOptions.withTextField(magnitude)
+                pointAnnotationOptions.withTextField(magnitude).withTextOffset(listOf(1.5, 0.0)).withTextSize(12.0)
                 pointAnnotationManager?.create(pointAnnotationOptions)
             }
         }
