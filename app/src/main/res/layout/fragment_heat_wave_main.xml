@@ -14,5 +14,61 @@
         app:mapbox_cameraPitch="0.0"
         app:mapbox_cameraZoom="2.0"
         app:mapbox_locationComponentEnabled="true"
-        app:mapbox_locationComponentPuckBearing="heading" />
+        app:mapbox_locationComponentPuckBearing="heading" >
+
+    </com.mapbox.maps.MapView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            android:drawableLeft="@drawable/greencircle16x16"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/poppins_medium"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Low Probability"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textView2" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:drawableLeft="@drawable/yellowcircle16x16"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/poppins_medium"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Medium Probability"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/textView"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:drawableLeft="@drawable/redcircle_16"
+            android:drawablePadding="8dp"
+            android:fontFamily="@font/poppins_medium"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="High Probability"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/textView2"
+            app:layout_constraintStart_toStartOf="@+id/textView2" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </FrameLayout>

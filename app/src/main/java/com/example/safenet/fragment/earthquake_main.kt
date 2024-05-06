@@ -12,6 +12,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.example.safenet.Earthquake
 import com.example.safenet.MainActivity
 import com.example.safenet.R
@@ -37,6 +39,9 @@ import okhttp3.Response
 import okio.IOException
 import org.json.JSONArray
 import org.json.JSONException
+import org.json.JSONObject
+import com.android.volley.Request as VolleyRequest
+import com.android.volley.Response as VolleyResponse
 
 
 class earthquake_main : Fragment(), bottom_sheet_earthquake.OnEarthquakeSubmitListener {
@@ -46,46 +51,7 @@ class earthquake_main : Fragment(), bottom_sheet_earthquake.OnEarthquakeSubmitLi
     val bottomSheetDialog = bottom_sheet_earthquake()
     private lateinit var fabPlus:FloatingActionButton
 
-    private val cityCoordinates = listOf(
-        Pair(26.2124, 127.6809),
-        Pair(33.5904, 130.4017),
-        Pair(35.6895, 139.6917),
-        Pair(26.2124, 127.6809),
-        Pair(16.5662, 121.2620),
-        Pair(10.3157, 123.8854),
-        Pair(7.1907, 125.4553),
-        Pair(26.6340, 78.3617),
-        Pair(26.5361, 77.0616),
-        Pair(33.4996, 126.5312),
-        Pair(36.5263, 128.7973),
-        Pair(35.8298, 127.1480),
-        Pair(23.4241, 113.3622),
-        Pair(26.0789, 117.9874),
-        Pair(29.1832, 120.0934),
-        Pair(19.6959, 109.7453),
-        Pair(20.1497, 75.2066),
-        Pair(20.0169, 75.8200),
-        Pair(20.8880, 76.2591),
-        Pair(18.7742, 68.3937),
-        Pair(18.7650, 69.0357),
-        Pair(21.0466, 107.0448),
-        Pair(19.8075, 105.7851),
-        Pair(18.8890, 105.6810),
-        Pair(25.5000, 90.5000),
-        Pair(19.1738, 96.1342),
-        Pair(23.7416, 98.0734),
-        Pair(20.3165, 87.1086),
-        Pair(31.9686, 99.9018),
-        Pair(30.9843, 91.9623),
-        Pair(32.3547, 89.3985),
-        Pair(32.3182, 86.9023),
-        Pair(27.9944, 81.7603),
-        Pair(35.7596, 79.0193),
-        Pair(45.2538, 69.4455),
-        Pair(-18.7669, 46.8691),
-        Pair(17.1899, 88.4976),
-        Pair(18.9712, 72.2852),
-    )
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -169,8 +135,9 @@ class earthquake_main : Fragment(), bottom_sheet_earthquake.OnEarthquakeSubmitLi
                     val latitude = jsonObject.getDouble("latitude")
                     val longitude = jsonObject.getDouble("longitude")
                     val magnitude = jsonObject.getDouble("magnitude")
+                    val depth = jsonObject.getDouble("depth")
 
-                    val earthquake = Earthquake(latitude, longitude, magnitude)
+                    val earthquake = Earthquake(latitude, longitude, magnitude, depth)
                     createMarker(earthquake)
                 }
             } catch (e: JSONException) {
@@ -188,7 +155,10 @@ class earthquake_main : Fragment(), bottom_sheet_earthquake.OnEarthquakeSubmitLi
                 .withPoint(Point.fromLngLat(earthquake.longitude, earthquake.latitude))
                 .withIconImage(bitmap)
 
-            pointAnnotationManager?.create(pointAnnotationOptions)
+            predictMagnitude(earthquake.latitude, earthquake.longitude, earthquake.depth) { magnitude ->
+                pointAnnotationOptions.withTextField(magnitude)
+                pointAnnotationManager?.create(pointAnnotationOptions)
+            }
         }
     }
 
@@ -217,11 +187,41 @@ class earthquake_main : Fragment(), bottom_sheet_earthquake.OnEarthquakeSubmitLi
         }
     }
 
-    override fun onEarthquakeSubmit(latitude: Double, longitude: Double) {
-            // Create a marker on the map with the provided latitude and longitude
-            val earthquake = Earthquake(latitude, longitude, 0.0) // Assuming 0.0 for magnitude
-            createMarker(earthquake)
+    private fun predictMagnitude(latitude: Double, longitude: Double, depth: Double, callback: (String) -> Unit) {
+        val queue = Volley.newRequestQueue(requireContext())
+        val url = "https://earthquakemodel.onrender.com/predict/earthquake"
+        val params = HashMap<String, String>()
+        params["latitude"] = latitude.toString()
+        params["longitude"] = longitude.toString()
+        params["depth"] = depth.toString()
+
+        val request = object : StringRequest(
+            VolleyRequest.Method.POST, url,
+            VolleyResponse.Listener<String> { response ->
+                try {
+                    val jsonObject = JSONObject(response)
+                    val magnitude = jsonObject.getString("Maginitude")
+                    callback(magnitude)
+                } catch (e: JSONException) {
+                    // Handle JSON parsing error
+                }
+            },
+            VolleyResponse.ErrorListener { error ->
+                // Handle error
+            }
+        ) {
+            override fun getParams(): Map<String, String> {
+                return params
+            }
         }
+
+        queue.add(request)
+    }
+
+    override fun onEarthquakeSubmit(latitude: Double, longitude: Double, depth: Double) {
+        val earthquake = Earthquake(latitude, longitude, 0.0, depth)
+        createMarker(earthquake)
+    }
 
 
 

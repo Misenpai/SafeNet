@@ -7,8 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.example.safenet.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import org.json.JSONException
+import org.json.JSONObject
 
 class bottom_sheet_earthquake : BottomSheetDialogFragment() {
 
@@ -17,10 +24,13 @@ class bottom_sheet_earthquake : BottomSheetDialogFragment() {
     private lateinit var depthEditText: EditText
     private lateinit var submitButton: Button
     var listener: OnEarthquakeSubmitListener? = null
+    private val url:String = "https://earthquakemodel.onrender.com/predict/earthquake"
 
     interface OnEarthquakeSubmitListener {
-        fun onEarthquakeSubmit(latitude: Double, longitude: Double)
+        fun onEarthquakeSubmit(latitude: Double, longitude: Double,depth:Double)
     }
+
+
 
 
     override fun onCreateView(
@@ -41,14 +51,19 @@ class bottom_sheet_earthquake : BottomSheetDialogFragment() {
         submitButton.setOnClickListener {
             val latitude = latitudeEditText.text.toString().toDoubleOrNull()
             val longitude = longitudeEditText.text.toString().toDoubleOrNull()
+            val depth = depthEditText.text.toString().toDoubleOrNull()
 
-            if (latitude != null && longitude != null) {
-                listener?.onEarthquakeSubmit(latitude, longitude)
-                dismiss() // Dismiss the bottom sheet after submitting the values
+            if (latitude != null && longitude != null&&depth!=null) {
+                listener?.onEarthquakeSubmit(latitude, longitude,depth)
+                dismiss()
             } else {
                 // Handle invalid input
             }
+
+
         }
     }
+
+
 
 }
