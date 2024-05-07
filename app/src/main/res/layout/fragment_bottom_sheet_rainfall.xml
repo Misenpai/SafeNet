@@ -39,6 +39,7 @@
             android:hint="1901-2015"
             android:inputType="text"
             android:paddingLeft="20dp"
+            android:textColor="@color/darkBlue"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/state_name" />
@@ -57,6 +58,7 @@
             android:hint="State Name"
             android:inputType="textCapCharacters"
             android:paddingLeft="20dp"
+            android:textColor="@color/darkBlue"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

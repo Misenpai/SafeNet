@@ -24,6 +24,7 @@
             android:hint="Latitude"
             android:inputType="text"
             android:paddingLeft="20dp"
+            android:textColor="@color/darkBlue"
             app:layout_constraintEnd_toEndOf="@+id/longitude_earthquake"
             app:layout_constraintStart_toStartOf="@+id/longitude_earthquake"
             app:layout_constraintTop_toTopOf="parent" />

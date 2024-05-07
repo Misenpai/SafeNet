@@ -27,6 +27,8 @@ class LoginSignup : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+
         tabLayout = findViewById(R.id.tab_layout)
         viewPager2 = findViewById(R.id.view_page)
         tabLayout.addTab(tabLayout.newTab().setText("Login"))

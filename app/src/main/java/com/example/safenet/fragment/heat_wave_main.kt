@@ -7,12 +7,12 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.fragment.app.Fragment
 import com.example.safenet.DatabaseHelperHeatWave
 import com.example.safenet.MainActivity
 import com.example.safenet.OpenWeatherApiClient
@@ -22,7 +22,6 @@ import com.mapbox.android.core.permissions.PermissionsManager
 import com.mapbox.geojson.Point
 import com.mapbox.maps.MapView
 import com.mapbox.maps.Style
-import com.mapbox.maps.logD
 import com.mapbox.maps.plugin.annotation.annotations
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationManager
 import com.mapbox.maps.plugin.annotation.generated.PointAnnotationOptions
@@ -81,15 +80,17 @@ class heat_wave_main : Fragment() {
         mapView2.getMapboxMap().loadStyleUri(
             Style.MAPBOX_STREETS
         ) { style ->
-            markHotCitiesOnMap(style)
-            markMediumHotCitiesOnMap(style)
-            markNoHotCitiesOnMap(style)
+            markCitiesOnMap(style)
         }
 
     }
 
-    private fun markHotCitiesOnMap(style: Style){
-        bitmapFromDrawableRes(requireContext(),R.drawable.redcircle_16)?.let { bitmap ->
+    private fun markCitiesOnMap(style: Style) {
+        val redBitmap = bitmapFromDrawableRes(requireContext(), R.drawable.redcircle_16)
+        val yellowBitmap = bitmapFromDrawableRes(requireContext(), R.drawable.yellowcircle16x16)
+        val greenBitmap = bitmapFromDrawableRes(requireContext(), R.drawable.greencircle16x16)
+
+        if (redBitmap != null && yellowBitmap != null && greenBitmap != null) {
             val annotationApi = mapView2.annotations
             pointAnnotationManager = annotationApi.createPointAnnotationManager()
 
@@ -102,77 +103,17 @@ class heat_wave_main : Fragment() {
                         ) {
                             if (response.isSuccessful) {
                                 val temperature = response.body()?.main?.temperature
-                                if (temperature != null && temperature >= 40) {
+                                if (temperature != null) {
                                     val pointAnnotationOptions: PointAnnotationOptions =
                                         PointAnnotationOptions()
                                             .withPoint(Point.fromLngLat(lon, lat))
-                                            .withIconImage(bitmap)
-
-                                    pointAnnotationManager?.create(pointAnnotationOptions)
-                                }
-                            }
-                        }
-
-                        override fun onFailure(call: Call<OpenWeatherResponse>, t: Throwable) {
-                            // Handle failure
-                        }
-                    })
-            }
-        }
-    }
-
-    private fun markMediumHotCitiesOnMap(style: Style){
-        bitmapFromDrawableRes(requireContext(),R.drawable.yellowcircle16x16)?.let { bitmap ->
-            val annotationApi = mapView2.annotations
-            pointAnnotationManager = annotationApi.createPointAnnotationManager()
-
-            for ((lat, lon) in cityCoordinates) {
-                OpenWeatherApiClient.api.getCityWeather(lat, lon, "fef2ed665d05a9d1bfc56ffdbe387d7d")
-                    .enqueue(object : Callback<OpenWeatherResponse> {
-                        override fun onResponse(
-                            call: Call<OpenWeatherResponse>,
-                            response: Response<OpenWeatherResponse>
-                        ) {
-                            if (response.isSuccessful) {
-                                val temperature = response.body()?.main?.temperature
-                                if (temperature != null && temperature >= 25 && temperature < 40) {
-                                    val pointAnnotationOptions: PointAnnotationOptions =
-                                        PointAnnotationOptions()
-                                            .withPoint(Point.fromLngLat(lon, lat))
-                                            .withIconImage(bitmap)
-
-                                    pointAnnotationManager?.create(pointAnnotationOptions)
-                                }
-                            }
-                        }
-
-                        override fun onFailure(call: Call<OpenWeatherResponse>, t: Throwable) {
-                            // Handle failure
-                        }
-                    })
-            }
-        }
-    }
-
-    private fun markNoHotCitiesOnMap(style: Style){
-        bitmapFromDrawableRes(requireContext(),R.drawable.greencircle16x16)?.let { bitmap ->
-            val annotationApi = mapView2.annotations
-            pointAnnotationManager = annotationApi.createPointAnnotationManager()
-
-            for ((lat, lon) in cityCoordinates) {
-                OpenWeatherApiClient.api.getCityWeather(lat, lon, "fef2ed665d05a9d1bfc56ffdbe387d7d")
-                    .enqueue(object : Callback<OpenWeatherResponse> {
-                        override fun onResponse(
-                            call: Call<OpenWeatherResponse>,
-                            response: Response<OpenWeatherResponse>
-                        ) {
-                            if (response.isSuccessful) {
-                                val temperature = response.body()?.main?.temperature
-                                if (temperature != null && temperature <= 25) {
-                                    val pointAnnotationOptions: PointAnnotationOptions =
-                                        PointAnnotationOptions()
-                                            .withPoint(Point.fromLngLat(lon, lat))
-                                            .withIconImage(bitmap)
+                                            .withIconImage(
+                                                when {
+                                                    temperature >= 40 -> redBitmap
+                                                    temperature >= 25 -> yellowBitmap
+                                                    else -> greenBitmap
+                                                }
+                                            )
 
                                     pointAnnotationManager?.create(pointAnnotationOptions)
                                 }
