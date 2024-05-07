@@ -6,12 +6,13 @@ import android.graphics.Canvas
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.fragment.app.Fragment
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.safenet.Earthquake
@@ -208,6 +209,7 @@ class earthquake_main : Fragment(), bottom_sheet_earthquake.OnEarthquakeSubmitLi
             },
             VolleyResponse.ErrorListener { error ->
                 // Handle error
+                Toast.makeText(requireContext(), "Volley error: ${error.message}", Toast.LENGTH_SHORT).show()
             }
         ) {
             override fun getParams(): Map<String, String> {

@@ -1,21 +1,13 @@
 package com.example.safenet.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 import com.example.safenet.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import org.json.JSONException
-import org.json.JSONObject
 
 class bottom_sheet_earthquake : BottomSheetDialogFragment() {
 
@@ -29,9 +21,6 @@ class bottom_sheet_earthquake : BottomSheetDialogFragment() {
     interface OnEarthquakeSubmitListener {
         fun onEarthquakeSubmit(latitude: Double, longitude: Double,depth:Double)
     }
-
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

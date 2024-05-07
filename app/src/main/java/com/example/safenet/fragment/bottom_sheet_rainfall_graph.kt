@@ -1,12 +1,10 @@
 package com.example.safenet.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.safenet.R
-import com.example.safenet.RainfallDataListener
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -14,10 +12,11 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import org.json.JSONObject
 
 
-class bottom_sheet_rainfall_graph : BottomSheetDialogFragment(),RainfallDataListener {
-    private var rainfallData: Map<String, Float>? = null
+class bottom_sheet_rainfall_graph : BottomSheetDialogFragment() {
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,36 +30,38 @@ class bottom_sheet_rainfall_graph : BottomSheetDialogFragment(),RainfallDataList
         super.onViewCreated(view, savedInstanceState)
 
         val barChart = view.findViewById<BarChart>(R.id.barChart)
-        rainfallData?.let { setupBarChart(barChart, it) }
+        val predictedRainfall = arguments?.getString("predicted_rainfall")
+
+        if (predictedRainfall != null) {
+            val rainfallData = JSONObject(predictedRainfall)
+            setupBarChart(barChart, rainfallData)
+        }
     }
 
-
-    private fun setupBarChart(barChart: BarChart, rainfallData: Map<String, Float>) {
-        val months = rainfallData.keys.toTypedArray()
-        val entries = ArrayList<BarEntry>()
+    private fun setupBarChart(barChart: BarChart, rainfallData: JSONObject) {
+        // Create BarEntry objects from the predicted rainfall data
+        val barEntries = mutableListOf<BarEntry>()
+        val months = arrayOf("JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC")
 
         for ((index, month) in months.withIndex()) {
-            entries.add(BarEntry(index.toFloat(), rainfallData[month] ?: 0f))
+            val rainfallValue = rainfallData.optDouble(month, 0.0)
+            barEntries.add(BarEntry(index.toFloat(), rainfallValue.toFloat()))
         }
 
-        val barDataSet = BarDataSet(entries, "Rainfall")
-        val barData = BarData(barDataSet)
+        // Create the BarDataSet
+        val dataSet = BarDataSet(barEntries, "Rainfall by Month")
+        val barData = BarData(dataSet)
 
+        // Configure the BarChart
         barChart.data = barData
-        barChart.xAxis.valueFormatter = IndexAxisValueFormatter(months)
         barChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+        barChart.xAxis.valueFormatter = IndexAxisValueFormatter(months)
+        barChart.xAxis.setDrawGridLines(false)
+        barChart.axisLeft.setDrawGridLines(true)
         barChart.axisRight.isEnabled = false
+
         barChart.description.isEnabled = false
-        barChart.setFitBars(true)
-        barChart.invalidate()
-    }
-
-    fun setRainfallData(rainfallData: Map<String, Float>) {
-        this.rainfallData = rainfallData
-    }
-
-    override fun onRainfallDataReceived(rainfallData: Map<String, Float>) {
-        setRainfallData(rainfallData)
+        barChart.invalidate()  // Refresh the chart
     }
 
 }
