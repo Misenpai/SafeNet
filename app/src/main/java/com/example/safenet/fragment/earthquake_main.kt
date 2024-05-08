@@ -15,7 +15,9 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.example.safenet.DatabaseHelperEarthquake
 import com.example.safenet.Earthquake
+import com.example.safenet.EarthquakeAmbee
 import com.example.safenet.MainActivity
 import com.example.safenet.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -38,7 +40,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import okio.IOException
-import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import com.android.volley.Request as VolleyRequest
@@ -51,6 +52,8 @@ class earthquake_main : Fragment(), bottom_sheet_earthquake.OnEarthquakeSubmitLi
     private var pointAnnotationManager:PointAnnotationManager?=null
     val bottomSheetDialog = bottom_sheet_earthquake()
     private lateinit var fabPlus:FloatingActionButton
+    private  var  AMBEE_API_KEY = "213b55dda9f32846d34e6a8f4396324622b75c8177038c9985f85ccb1c86aa15"
+    private lateinit var databaseHelper: DatabaseHelperEarthquake
 
 
 
@@ -73,6 +76,10 @@ class earthquake_main : Fragment(), bottom_sheet_earthquake.OnEarthquakeSubmitLi
         } else {
             permissionsManager.requestLocationPermissions(requireActivity())
         }
+
+        databaseHelper = DatabaseHelperEarthquake(requireContext())
+        databaseHelper.initializeDatabase()
+
         bottomSheetDialog.listener = this
 
         fabPlus = view.findViewById(R.id.earthquake_bottom_sheet_action)
@@ -81,10 +88,15 @@ class earthquake_main : Fragment(), bottom_sheet_earthquake.OnEarthquakeSubmitLi
            bottomSheetDialog.show(childFragmentManager, "earthquake_bottom_sheet")
        }
 
+
         mapView2 = view.findViewById(R.id.mapViewEarthquake)
         mapView2.getMapboxMap().loadStyleUri(
             Style.MAPBOX_STREETS
-        ){style->fetchEarthquakeData()}
+        ){style->
+            val coordinates = databaseHelper.getAllCoordinates()
+            for ((latitude, longitude) in coordinates) {
+                fetchEarthquakeDataFromAmbee(latitude, longitude)
+            }}
 
         val mapView = MapView(requireContext())
         val viewportPlugin = mapView.viewport
@@ -101,27 +113,29 @@ class earthquake_main : Fragment(), bottom_sheet_earthquake.OnEarthquakeSubmitLi
 
     }
 
-    private fun fetchEarthquakeData() {
+    private fun fetchEarthquakeDataFromAmbee(latitude: Double, longitude: Double) {
         val client = OkHttpClient()
+        val url = "https://api.ambeedata.com/disasters/latest/by-lat-lng?lat=$latitude&lng=$longitude"
+
         val request = Request.Builder()
-            .url("https://everyearthquake.p.rapidapi.com/earthquakes?start=1&count=100&type=earthquake&latitude=33.962523&longitude=-118.3706975&radius=1000&units=miles&magnitude=3&intensity=1")
+            .url(url)
             .get()
-            .addHeader("X-RapidAPI-Key", "fa16a211e8mshf1cf291aa9d0cbdp1447edjsn321790df2ee4")
-            .addHeader("X-RapidAPI-Host", "everyearthquake.p.rapidapi.com")
+            .addHeader("x-api-key", AMBEE_API_KEY)
+            .addHeader("Content-type", "application/json")
             .build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 // Handle failure
+                requireActivity().runOnUiThread {
+                    Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
             }
 
             override fun onResponse(call: Call, response: Response) {
-                if (response.isSuccessful) {
-                    val responseBody = response.body?.string()
-                    // Process the response and create markers on the map
+                val responseBody = response.body?.string()
+                requireActivity().runOnUiThread {
                     processEarthquakeData(responseBody)
-                } else {
-                    // Handle unsuccessful response
                 }
             }
         })
@@ -130,25 +144,52 @@ class earthquake_main : Fragment(), bottom_sheet_earthquake.OnEarthquakeSubmitLi
     private fun processEarthquakeData(responseBody: String?) {
         if (responseBody != null) {
             try {
-                val jsonArray = JSONArray(responseBody)
-                for (i in 0 until jsonArray.length()) {
-                    val jsonObject = jsonArray.getJSONObject(i)
-                    val latitude = jsonObject.getDouble("latitude")
-                    val longitude = jsonObject.getDouble("longitude")
-                    val magnitude = jsonObject.getDouble("magnitude")
-                    val depth = jsonObject.getDouble("depth")
+                val jsonObject = JSONObject(responseBody)
+                val result = jsonObject.getJSONArray("result")
+                for (i in 0 until result.length()) {
+                    val earthquakeObject = result.getJSONObject(i)
+                    val severity = earthquakeObject.getDouble("severity")
 
-                    val earthquake = Earthquake(latitude, longitude, magnitude, depth)
-                    createMarker(earthquake)
+                        val coordinates = earthquakeObject.getJSONObject("geometry").getJSONArray("coordinates")
+                        val longitude = coordinates.getDouble(0)
+                        val latitude = coordinates.getDouble(1)
+                        val earthquake = EarthquakeAmbee(latitude, longitude, severity)
+                        createMarkerAmbee(earthquake)
+
                 }
             } catch (e: JSONException) {
                 // Handle JSON parsing error
+                Toast.makeText(requireContext(), "JSON parsing error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
+
+    private fun createMarkerAmbee(earthquake: EarthquakeAmbee) {
+        val iconDrawable = when (earthquake.magnitude) {
+            in 0.0..4.5 -> R.drawable.icons8_earthquake_64_green
+            in 4.6..6.0 -> R.drawable.icons8_earthquake_64_blue
+            else -> R.drawable.icons8_earthquake_64
+        }
+
+        bitmapFromDrawableRes(requireContext(), iconDrawable)?.let { bitmap ->
+            val annotationApi = mapView2.annotations
+            pointAnnotationManager = annotationApi.createPointAnnotationManager()
+
+            val pointAnnotationOptions: PointAnnotationOptions = PointAnnotationOptions()
+                .withPoint(Point.fromLngLat(earthquake.longitude, earthquake.latitude))
+                .withIconImage(bitmap)
+                .withTextField(earthquake.magnitude.toString())
+                .withTextOffset(listOf(1.5, 0.0))
+                .withTextSize(12.0)
+
+
+            pointAnnotationManager?.create(pointAnnotationOptions)
+        }
+    }
+
     private fun createMarker(earthquake: Earthquake) {
-        bitmapFromDrawableRes(requireContext(), R.drawable.icons8_earthquake_64)?.let { bitmap ->
+        bitmapFromDrawableRes(requireContext(), R.drawable.earthquake_offline)?.let { bitmap ->
             val annotationApi = mapView2.annotations
             pointAnnotationManager = annotationApi.createPointAnnotationManager()
 
