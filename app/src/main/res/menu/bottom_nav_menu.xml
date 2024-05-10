@@ -18,4 +18,8 @@
         android:id="@+id/nav_earthquake"
         android:icon="@drawable/earthquake"
         android:title="Earthquake" />
+    <item
+        android:id="@+id/nav_marine"
+        android:icon="@drawable/marine"
+        android:title="Marine" />
 </menu>

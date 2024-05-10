@@ -13,6 +13,7 @@ import com.example.safenet.fragment.cyclone_main
 import com.example.safenet.fragment.earthquake_main
 import com.example.safenet.fragment.flood_main
 import com.example.safenet.fragment.heat_wave_main
+import com.example.safenet.fragment.marine_main
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mapbox.android.core.permissions.PermissionsListener
 import com.mapbox.android.core.permissions.PermissionsManager
@@ -61,6 +62,8 @@ class MainActivity : AppCompatActivity(), PermissionsListener {
                 loadFragment(flood_main(), false)
             } else if (items == R.id.nav_earthquake) {
                 loadFragment(earthquake_main(), false)
+            }else if (items == R.id.nav_marine){
+                loadFragment(marine_main(),false)
             }
             true
         }
